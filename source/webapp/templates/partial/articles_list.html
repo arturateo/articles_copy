@@ -19,12 +19,15 @@
                             <a href="{% url "webapp:article_delete_view" article.pk %}" class="btn btn-primary"><i
                                     class="bi bi-trash3"></i></a>
                         {% endif %}
-                        {% if perms.webapp.delete_article or request.user == article.author %}
-                            <a href="#" class="btn btn-primary" id="btn_likes"><i class="bi bi-heart"></i></a>
+                        {% if user in article.like.all %}
+                            <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                                    data-id="{{ article.pk }}" id="btn_unlikes"></button>
+                        {% else %}
+                            <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                                    data-id="{{ article.pk }}" id="btn_likes"></button>
                         {% endif %}
-                        {% if perms.webapp.delete_article or request.user == article.author %}
-                            <span class="btn btn-primary">0</span>
-                        {% endif %}
+                        <span class="btn btn-primary" data-id="{{ article.pk }}"
+                              id="like_number">{{ article.get_total_like }}</span>
                     </div>
                 </div>
             </div>
