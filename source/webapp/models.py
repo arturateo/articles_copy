@@ -19,7 +19,7 @@ class Article(AbstractModel):
     tags = models.ManyToManyField('webapp.Tag', related_name='articles', blank=True)
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_DEFAULT,
                                default=1, related_name="articles", verbose_name="Автор")
-    like = models.ManyToManyField(get_user_model(), related_name='likes', verbose_name='Лайки')
+    like = models.ManyToManyField(get_user_model(), related_name='article_likes', verbose_name='Лайки')
 
     def get_total_like(self):
         return len(self.like.all())
@@ -45,6 +45,10 @@ class Comment(AbstractModel):
     text = models.TextField(max_length=400, verbose_name='Комментарий')
     author = models.ForeignKey('auth.User', on_delete=models.SET_DEFAULT,
                                default=1, related_name="comments", verbose_name="Автор")
+    like = models.ManyToManyField(get_user_model(), related_name='comment_likes', verbose_name='Лайки')
+
+    def get_total_like(self):
+        return len(self.like.all())
 
     def __str__(self):
         return self.text[:20]

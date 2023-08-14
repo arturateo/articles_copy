@@ -19,18 +19,40 @@
         <p class="card-text">{{ article.content }}</p>
         <p class="card-text">дата изменения: {{ article.updated_at }}</p>
     </div>
-
+    <div class="btn-group" role="group">
+        {% if request.user.is_authenticated %}
+            {% if user in article.like.all %}
+                <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                        data-id="{{ article.pk }}" data-name="article" id="btn_unlikes"></button>
+            {% else %}
+                <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                        data-id="{{ article.pk }}" data-name="article" id="btn_likes"></button>
+            {% endif %}
+        {% endif %}
+        <span class="btn btn-primary" data-id="{{ article.pk }}"
+              id="like_a_number"></span>
+    </div>
     <h2>Коментарии</h2>
     {% for comment in comments %}
         <div>
             <h6>{{ comment.author.username }}</h6>
-            <p>{{ comment.text }}</p>
+            <span>{{ comment.text }}</span>
         </div>
         <div class="btn-group" role="group">
             <a href="{% url "webapp:comment_update" comment.pk %}"
                class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
             <a href="{% url "webapp:comment_delete" comment.pk %}" class="btn btn-primary"><i
                     class="bi bi-trash3"></i></a>
+            {% if request.user.is_authenticated %}
+                {% if user in comment.like.all %}
+                    <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                            data-id="{{ comment.pk }}" data-name="comment" id="btn_unlikes"></button>
+                {% else %}
+                    <button class="btn bi bi-heart btn-primary" onclick="onClick(event)"
+                            data-id="{{ comment.pk }}" data-name="comment" id="btn_likes"></button>
+                {% endif %}
+            {% endif %}
+            <span class="btn btn-primary" data-id="{{ comment.pk }}" id="like_c_number"></span>
         </div>
     {% endfor %}
 
